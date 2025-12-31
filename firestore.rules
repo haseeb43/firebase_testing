@@ -1,0 +1,67 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function getUserRoles(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.roles;
+    }
+
+    function hasRole(role) {
+      let userId = request.auth.uid;
+      // This check is important to prevent errors if the user document doesn't exist yet.
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(userId)) && role in getUserRoles(userId);
+    }
+    
+    function isActiveUser() {
+      return isSignedIn()
+      && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true;
+    }
+
+
+    function canReadInvoice() {
+  return isActiveUser()
+    && (
+      hasRole('admin') ||
+      hasRole('super_admin') ||
+      resource.data.userId == request.auth.uid
+    );
+}
+
+
+
+
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || hasRole('admin');
+      allow list: if hasRole('admin');  // Allow admins to list all users
+
+      match /{subcollection}/{docId} {
+        allow read, write: if hasRole('admin') || isOwner(userId);
+      }
+    }
+    
+    match /activityLogs/{logId} {
+      allow create: if isSignedIn();
+      allow list, get: if hasRole('super_admin'); // Only super_admin can read logs
+      allow update, delete: if false; // Logs are immutable
+    }
+    match /invoices/{invoiceId} {
+  allow get: if canReadInvoice();
+  allow list: if isActiveUser(); // optional but safer
+  allow create: if isActiveUser();
+  allow update, delete: if hasRole('admin') || hasRole('super_admin');
+}
+
+
+  }
+}
