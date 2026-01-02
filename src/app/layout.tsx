@@ -1,3 +1,4 @@
+import { CapacitorSetup } from '@/components/CapacitorSetup';
 import { Toaster } from '@/components/ui/toaster';
 import { I18nProvider } from '@/contexts/i18n-provider';
 import { InvoicesProvider } from '@/contexts/invoices-provider';
@@ -33,6 +34,7 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased', inter.className)}>
+        <CapacitorSetup />
         <FirebaseClientProvider>
           <SettingsProvider>
             <AppUserProvider>
