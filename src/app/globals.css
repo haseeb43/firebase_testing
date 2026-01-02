@@ -12,17 +12,8 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Or target your navbar specifically */
 header {
   top: env(safe-area-inset-top, 0px) !important;
-  padding-top: env(safe-area-inset-top);
-}
-
-header {
-  /* Use padding to push content down */
-  padding-top: env(safe-area-inset-top, 20px);
-  /* Or use it in a variable for more control */
-  --safe-area-inset-top: env(safe-area-inset-top, 0px);
 }
 
 @layer base {
