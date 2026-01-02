@@ -6,6 +6,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Add padding to body or your main container */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Or target your navbar specifically */
+.header {
+  padding-top: env(safe-area-inset-top);
+}
+
 @layer base {
   :root {
     --background: 220 91% 95.7%;
