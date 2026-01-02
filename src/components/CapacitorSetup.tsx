@@ -9,19 +9,25 @@ export function CapacitorSetup() {
     if (Capacitor.isNativePlatform()) {
       const setupStatusBar = async () => {
         try {
-          // Show the status bar
+          // Show status bar
           await StatusBar.show();
 
-          // Style.Light = Dark text for light backgrounds (BLACK icons)
+          // Set icon style based on your background color
+          // Style.Light = Dark icons (for light backgrounds)
+          // Style.Dark = White icons (for dark backgrounds)
           await StatusBar.setStyle({ style: Style.Light });
 
-          // Note: backgroundColor might not work on Android 15+
-          // but we'll keep it for older versions
-          await StatusBar.setBackgroundColor({ color: '#ffffff' });
+          // Try to set background color (works on iOS and Android 14-)
+          // Silently fails on Android 15+ (CSS handles it)
+          try {
+            await StatusBar.setBackgroundColor({ color: '#ffffff' });
+          } catch (e) {
+            // Android 15+ - CSS body::before handles the background
+          }
 
           console.log('Status bar configured');
         } catch (error) {
-          console.error('Status bar error:', error);
+          console.error('Status bar setup failed:', error);
         }
       };
 
@@ -43,11 +49,15 @@ export function CapacitorSetup() {
 //     if (Capacitor.isNativePlatform()) {
 //       const setupStatusBar = async () => {
 //         try {
-//           // Use LIGHT background (to match drawer bg-background)
-//           await StatusBar.setBackgroundColor({ color: '#ffffff' }); // or your bg-background color
+//           // Show the status bar
+//           await StatusBar.show();
 
-//           // Use DARK icons for light background
-//           await StatusBar.setStyle({ style: Style.Dark });
+//           // Style.Light = Dark text for light backgrounds (BLACK icons)
+//           await StatusBar.setStyle({ style: Style.Light });
+
+//           // Note: backgroundColor might not work on Android 15+
+//           // but we'll keep it for older versions
+//           await StatusBar.setBackgroundColor({ color: '#ffffff' });
 
 //           console.log('Status bar configured');
 //         } catch (error) {
