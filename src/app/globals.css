@@ -6,7 +6,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Add padding to body or your main container */
+/* Add padding to body or your main container
 body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -19,10 +19,44 @@ body::before {
   left: 0;
   right: 0;
   height: env(safe-area-inset-top, 0px);
-  background: #1a1f2e; /* Match your header */
+  background: #1a1f2e; 
   z-index: 9999;
 }
 
+header {
+  top: env(safe-area-inset-top, 0px) !important;
+}
+
+
+[role='dialog'][class*='inset-y-0'] {
+  top: env(safe-area-inset-top, 0px) !important;
+  height: calc(100vh - env(safe-area-inset-top, 0px)) !important;
+}
+
+
+[role='dialog'] button[class*='absolute'][class*='top-4'] {
+  top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+} */
+
+/* Add padding to body */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Status bar background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #ffffff; /* Match your drawer background */
+  z-index: 9999;
+}
+
+/* Header positioning */
 header {
   top: env(safe-area-inset-top, 0px) !important;
 }
@@ -33,9 +67,15 @@ header {
   height: calc(100vh - env(safe-area-inset-top, 0px)) !important;
 }
 
-/* Also fix the close button position */
+/* Fix drawer close button - REMOVE the extra padding */
 [role='dialog'] button[class*='absolute'][class*='top-4'] {
-  top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+  top: 1rem !important; /* Keep original position, don't add safe-area */
+}
+
+/* OR if the button still needs adjustment: */
+[role='dialog'] button[class*='absolute'][class*='right-4'][class*='top-4'] {
+  top: 1rem !important;
+  right: 1rem !important;
 }
 
 @layer base {
