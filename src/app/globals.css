@@ -27,8 +27,15 @@ header {
   top: env(safe-area-inset-top, 0px) !important;
 }
 
-[role='dialog'] {
-  padding-top: env(safe-area-inset-top, 0px) !important;
+/* Fix drawer to account for status bar */
+[role='dialog'][class*='inset-y-0'] {
+  top: env(safe-area-inset-top, 0px) !important;
+  height: calc(100vh - env(safe-area-inset-top, 0px)) !important;
+}
+
+/* Also fix the close button position */
+[role='dialog'] button[class*='absolute'][class*='top-4'] {
+  top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
 }
 
 @layer base {

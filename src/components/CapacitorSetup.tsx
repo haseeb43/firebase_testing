@@ -7,11 +7,21 @@ import { useEffect } from 'react';
 export function CapacitorSetup() {
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
-      // Set icon color to LIGHT (white icons for dark background)
-      StatusBar.setStyle({ style: Style.Light });
+      const setupStatusBar = async () => {
+        try {
+          // Set background first
+          await StatusBar.setBackgroundColor({ color: '#1a1f2e' });
 
-      // Set background color to match header
-      StatusBar.setBackgroundColor({ color: '#1a1f2e' });
+          // Then force light icons (white)
+          await StatusBar.setStyle({ style: Style.Light });
+
+          console.log('Status bar configured');
+        } catch (error) {
+          console.error('Status bar error:', error);
+        }
+      };
+
+      setupStatusBar();
     }
   }, []);
 
@@ -27,8 +37,11 @@ export function CapacitorSetup() {
 // export function CapacitorSetup() {
 //   useEffect(() => {
 //     if (Capacitor.isNativePlatform()) {
-//       // Set status bar style (light icons for dark background)
+//       // Set icon color to LIGHT (white icons for dark background)
 //       StatusBar.setStyle({ style: Style.Light });
+
+//       // Set background color to match header
+//       StatusBar.setBackgroundColor({ color: '#1a1f2e' });
 //     }
 //   }, []);
 
