@@ -9,11 +9,15 @@ export function CapacitorSetup() {
     if (Capacitor.isNativePlatform()) {
       const setupStatusBar = async () => {
         try {
-          // Use LIGHT background (to match drawer bg-background)
-          await StatusBar.setBackgroundColor({ color: '#ffffff' }); // or your bg-background color
+          // Show the status bar
+          await StatusBar.show();
 
-          // Use DARK icons for light background
-          await StatusBar.setStyle({ style: Style.Dark });
+          // Style.Light = Dark text for light backgrounds (BLACK icons)
+          await StatusBar.setStyle({ style: Style.Light });
+
+          // Note: backgroundColor might not work on Android 15+
+          // but we'll keep it for older versions
+          await StatusBar.setBackgroundColor({ color: '#ffffff' });
 
           console.log('Status bar configured');
         } catch (error) {
@@ -39,11 +43,11 @@ export function CapacitorSetup() {
 //     if (Capacitor.isNativePlatform()) {
 //       const setupStatusBar = async () => {
 //         try {
-//           // Set background first
-//           await StatusBar.setBackgroundColor({ color: '#1a1f2e' });
+//           // Use LIGHT background (to match drawer bg-background)
+//           await StatusBar.setBackgroundColor({ color: '#ffffff' }); // or your bg-background color
 
-//           // Then force light icons (white)
-//           await StatusBar.setStyle({ style: Style.Light });
+//           // Use DARK icons for light background
+//           await StatusBar.setStyle({ style: Style.Dark });
 
 //           console.log('Status bar configured');
 //         } catch (error) {
