@@ -12,8 +12,23 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #1a1f2e; /* Match your header */
+  z-index: 9999;
+}
+
 header {
   top: env(safe-area-inset-top, 0px) !important;
+}
+
+[role='dialog'] {
+  padding-top: env(safe-area-inset-top, 0px) !important;
 }
 
 @layer base {
