@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/sheet';
 import { useUser } from '@/firebase';
 import { useI18n } from '@/hooks/use-i18n';
-import type { StatusBarPlugin, Style as StatusBarStyle } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar } from '@capacitor/status-bar';
 import { BookCopyIcon, CheckIcon, FileTextIcon, LayoutDashboardIcon, MenuIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,17 +34,13 @@ export default function HomePage() {
 
   // Capacitor StatusBar logic (client only)
   useEffect(() => {
-    let StatusBar: StatusBarPlugin | undefined;
-    let Style: typeof StatusBarStyle | undefined;
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const statusBarModule = require('@capacitor/status-bar');
-      StatusBar = statusBarModule.StatusBar;
-      Style = statusBarModule.Style;
-      if (StatusBar && Style) {
+    if (typeof window !== 'undefined' && StatusBar && Capacitor) {
+      if (Capacitor.getPlatform() === 'android') {
+        StatusBar.setOverlaysWebView({ overlay: false });
+      } else {
         StatusBar.setOverlaysWebView({ overlay: true });
-        StatusBar.setStyle({ style: Style.Dark }); // or Style.Light
       }
+      // StatusBar.setStyle({ style: 'DARK' }); // or 'LIGHT'
     }
   }, []);
 
@@ -361,4 +358,4 @@ export default function HomePage() {
       </div>
     </>
   );
-} 
+}
